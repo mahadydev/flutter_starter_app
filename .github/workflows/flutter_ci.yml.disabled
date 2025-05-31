@@ -1,0 +1,61 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+
+      - name: Cache Flutter pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache-
+
+      - name: Create .env file in assets
+        run: |
+          mkdir -p assets
+          echo "${{ secrets.ENV_FILE }}" > assets/.env
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Ensure Android debug keystore directory exists
+        run: mkdir -p /home/runner/.config/.android
+        
+      - name: Run code generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Install Android NDK
+        run: |
+          yes | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "ndk;29.0.13113456"
+          yes | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses
+
+      - name: Ensure Android debug keystore directory exists
+        run: mkdir -p /home/runner/.config/.android
+
+      - name: Build APK
+        run: flutter build apk --profile
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-apk
+          path: build/app/outputs/flutter-apk/app-profile.apk
