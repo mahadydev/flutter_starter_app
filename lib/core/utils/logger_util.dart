@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
@@ -12,11 +13,11 @@ import 'package:logger/logger.dart';
 /// LoggerUtil.verbose('This is a verbose message');
 class LoggerUtil {
   static final Logger _logger = Logger(
-    filter: ProductionFilter(),
+    filter: kDebugMode ? DevelopmentFilter() : ProductionFilter(),
     output: ConsoleOutput(),
     printer: PrettyPrinter(
-      dateTimeFormat:
-          (time) => DateFormat('yyyy-MM-dd hh:mm:ss a').format(time),
+      dateTimeFormat: (time) =>
+          DateFormat('yyyy-MM-dd hh:mm:ss a').format(time),
     ),
   );
 

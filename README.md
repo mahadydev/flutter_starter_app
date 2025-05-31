@@ -10,21 +10,19 @@ A **production-ready, scalable, and maintainable Flutter starter template** for 
 - [🛠️ Technology Stack](#-technology-stack)
 - [🚦 Getting Started](#-getting-started)
 - [🔥 Firebase Setup](#-firebase-setup)
-- [🧭 Routing](#-routing)
 - [🖼️ Native Splash Screen](#-native-splash-screen)
 - [⚡ Usage Examples](#-usage-examples)
 - [🎨 Theme Management](#-theme-management)
 - [💾 Storage](#-storage)
 - [🌐 Networking](#-networking)
-- [🗄️ Database (Drift)](#-database-drift)
 - [🌍 Localization](#-localization)
-- [🌐 Network Connectivity](#-network-connectivity)
 - [🧪 Testing](#-testing)
 - [📈 Analytics & Monitoring](#-analytics--monitoring)
 - [🔗 Useful Commands](#-useful-commands)
 - [📘 Additional Notes](#-additional-notes)
 - [Rebranding](#rebranding)
 - [📂 Folder Structure](#-folder-structure)
+- [🏗️ Architecture](#-architecture)
 
 ---
 
@@ -63,15 +61,34 @@ A **production-ready, scalable, and maintainable Flutter starter template** for 
 
 ### Installation
 
+Clone the repository and set up dependencies:
+
 ```sh
-git clone https://github.com/yourusername/starter_app.git
-cd starter_app
+git clone https://github.com/yourusername/flutter_starter_app.git
+cd flutter_starter_app
 flutter pub get
-cp .env.example .env # Fill in your keys
+```
+
+Set up environment variables:
+
+```sh
+cp .env.example .env # Edit .env and fill in your keys
+```
+
+Generate code and assets:
+
+```sh
 dart run build_runner build --delete-conflicting-outputs
 flutter pub run flutter_native_splash:create
+```
+
+Run the app:
+
+```sh
 flutter run
 ```
+
+> For Firebase setup and additional configuration, see the [Firebase Setup](#-firebase-setup) section below.
 
 ---
 
@@ -197,59 +214,6 @@ final response = await apiClient.getSomeData();
 
 ---
 
-## 🌐 Network Connectivity & Internet Status
-
-This starter app includes **real-time network connectivity and internet status checking** using [`connectivity_plus`](https://pub.dev/packages/connectivity_plus) and [`internet_connection_checker_plus`](https://pub.dev/packages/internet_connection_checker_plus). This ensures your app can reliably detect both the type of network connection (WiFi, mobile, etc.) and whether the device actually has internet access.
-
-### How It Works
-
-- **Connectivity Type**:  
-  The app listens for changes in network type (WiFi, mobile, ethernet, etc.) using `connectivity_plus`.
-- **Internet Access**:  
-  It also checks for real internet access (not just local network) using `internet_connection_checker_plus`.
-- **State Management**:  
-  The `InternetConnectionCubit` combines both sources and exposes a unified state (`InternetConnectionState`) with:
-  - `connectionType`: The current network type (WiFi, mobile, etc.)
-  - `status`: Whether the device is online or offline
-
-### Usage Example
-
-You can access the current network status anywhere in your app using the cubit:
-
-```dart
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:starter_app/core/network/connection_checker/internet_connection_cubit.dart';
-import 'package:starter_app/core/network/connection_checker/internet_connection_state.dart';
-
-BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-  builder: (context, state) {
-    return Text(
-      'Status: ${state.status.name}, Type: ${state.connectionType.name}',
-    );
-  },
-);
-```
-
-### Why Both?
-
-- `connectivity_plus` tells you if you're connected to a network, but not if you have actual internet access.
-- `internet_connection_checker_plus` verifies that the device can reach the internet (e.g., by pinging Google).
-
-### Customization
-
-- The logic is implemented in `lib/core/network/connection_checker/internet_connection_cubit.dart`.
-- The state is defined in `lib/core/network/connection_checker/internet_connection_state.dart`.
-- The cubit is registered for dependency injection and can be accessed via `serviceLocator<InternetConnectionCubit>()`.
-
----
-
-## 🗄️ Database (Drift)
-
-- Use Drift for relational/offline-first data.
-- Define tables and DAOs in `lib/core/storage/drift/`.
-
----
-
 ## 🌍 Localization
 
 - Place `.arb` files in `lib/app/language/arb/` (e.g., `app_fr.arb`).
@@ -308,36 +272,10 @@ See [REBRANDING.md](./REBRANDING.md) for instructions on changing app name, pack
 
 ## 📂 Folder Structure
 
-- `lib/core/shared/`: Shared widgets, extensions, and utilities.
-- `lib/core/`: Core services, storage, networking, and shared code.
-- `lib/app/`: App-level configuration, routing, localization, theme, and DI.
-- `lib/features/`: Feature modules (business logic, UI, etc.).
+For a detailed folder structure and architectural philosophy, see [architecture.md](./architecture.md).
 
 ---
 
-> For architecture details and folder structure, see [architecture.md](architecture.md) and inline code comments.
+## 🏗️ Architecture
 
----
-
-## 🧭 Routing
-
-- **GoRouter** is used for declarative, type-safe navigation and deep linking.
-- All routes are defined in `lib/app/router/app_router.dart`.
-- The root router is provided to `MaterialApp.router` in `app.dart`.
-- Supports nested navigation, error handling, and route guards.
-
-### Example
-
-```dart
-import 'package:starter_app/app/router/app_router.dart';
-
-MaterialApp.router(
-  routerConfig: AppRouter.router,
-  // ...other params
-);
-```
-
-- To add a new route, update the `routes` list in `AppRouter`.
-- Use `context.go('/path')` or `context.push('/path')` for navigation.
-
----
+This project follows a feature-first, clean architecture for scalability and maintainability. For in-depth details, best practices, and extension strategies, refer to [architecture.md](./architecture.md).
