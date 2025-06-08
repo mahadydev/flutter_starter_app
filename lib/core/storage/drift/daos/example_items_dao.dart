@@ -11,6 +11,10 @@ class ExampleItemsDao extends DatabaseAccessor<AppDatabase>
 
   Future<int> insertItem(ExampleItemsCompanion item) =>
       into(exampleItems).insert(item);
+
   Future<List<ExampleItem>> getAllItems() => select(exampleItems).get();
+
+  Stream<List<ExampleItem>> watchAllItems() => select(exampleItems).watch();
+
   Future<void> clearAll() => delete(exampleItems).go();
 }

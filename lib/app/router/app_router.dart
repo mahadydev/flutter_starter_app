@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starter_app/core/shared/widgets/error_screen.dart';
-import 'package:flutter_starter_app/core/shared/widgets/showcase_screen.dart';
+import 'package:flutter_starter_app/features/showcase_screen/screens/showcase_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
