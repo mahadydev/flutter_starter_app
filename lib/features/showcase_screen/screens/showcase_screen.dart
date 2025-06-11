@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_starter_app/core/shared/extensions/app_localization.dart';
-import 'package:flutter_starter_app/core/shared/widgets/section_card.dart';
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/connection_status_section.dart';
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/database_section.dart';
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/language_section.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_starter_app/features/showcase_screen/screens/components/
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/snackbar_section.dart';
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/storage_section.dart';
 import 'package:flutter_starter_app/features/showcase_screen/screens/components/theme_section.dart';
+import 'package:flutter_starter_app/features/showcase_screen/widgets/section_card.dart';
 
 class ShowcaseScreen extends StatelessWidget {
   const ShowcaseScreen({super.key});

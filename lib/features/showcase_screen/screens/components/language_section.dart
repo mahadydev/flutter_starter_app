@@ -25,23 +25,43 @@ class LanguageSection extends StatelessWidget {
             ),
             SizedBox(width: 16.w),
             Expanded(
-              child: DropdownButton<Locale>(
-                isExpanded: true,
-                value: langState.locale,
-                onChanged: (Locale? newLocale) async {
-                  if (newLocale != null) {
-                    await languageCubit.switchLanguage(newLocale);
-                  }
-                },
-                items: AppLocalizations.supportedLocales.map((locale) {
-                  return DropdownMenuItem<Locale>(
-                    value: locale,
-                    child: Text(
-                      locale.toLanguageTag().toUpperCase(),
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                  );
-                }).toList(),
+              //add outlined border to the dropdown
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: DropdownButton<Locale>(
+                  elevation: 0,
+                  underline: const SizedBox.shrink(),
+                  isExpanded: true,
+                  value: langState.locale,
+                  onChanged: (Locale? newLocale) async {
+                    if (newLocale != null) {
+                      await languageCubit.switchLanguage(newLocale);
+                    }
+                  },
+                  items: AppLocalizations.supportedLocales.map((locale) {
+                    return DropdownMenuItem<Locale>(
+                      value: locale,
+                      child: Padding(
+                        // if rtl add padding to the left
+                        padding: EdgeInsets.only(
+                          right: langState.locale!.languageCode == 'ar'
+                              ? 16.w
+                              : 0,
+                          left: langState.locale!.languageCode == 'ar'
+                              ? 0
+                              : 16.w,
+                        ),
+                        child: Text(
+                          locale.toLanguageTag().toUpperCase(),
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ],
